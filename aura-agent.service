@@ -1,0 +1,25 @@
+[Unit]
+Description=Aura Agent — always-on AI overlay
+After=aura-xserver.service
+Requires=aura-xserver.service
+
+[Service]
+Type=simple
+User=swarm
+Group=swarm
+Environment=DISPLAY=:0
+Environment=XAUTHORITY=/home/swarm/.Xauthority
+Environment=AURA_ACTIONS_PATH=/home/swarm/projects/aura_agent/aura_actions.sh
+Environment=AURA_NOMAD_PATH=/home/swarm/projects/aura_agent/network_nomad.sh
+Environment=AURA_TOOLS_DIR=/home/swarm/projects/aura_agent/tools
+Environment=AURA_PYTHON=/home/swarm/projects/aura_agent/tools/.venv/bin/python
+WorkingDirectory=/home/swarm/projects/aura_agent
+ExecStartPre=/usr/bin/xset -display :0 s off
+ExecStartPre=/usr/bin/xset -display :0 s noblank
+ExecStartPre=/usr/bin/xset -display :0 -dpms
+ExecStart=/home/swarm/projects/aura_agent/target/release/aura_agent
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=graphical.target
